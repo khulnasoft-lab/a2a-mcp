@@ -1,4 +1,4 @@
-# A2A vs MCP Agent Demo
+# A2A ⚡ MCP Agents
 
 This project demonstrates two different approaches to agent communication:
 1. **Master Control Program (MCP)** - A centralized server-based approach where agents communicate through a central server
