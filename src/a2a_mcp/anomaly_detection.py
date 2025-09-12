@@ -40,11 +40,20 @@ class AnomalyDetector:
         with self.lock:
             if len(self.history) < self.history_window:
                 return False
-            X = np.array([[item[k] for k in self.metric_keys] for item in self.history])
-            self.model.fit(X)
-            logger.info("Trained anomaly detection model.")
-            return True
-
+            window = list(self.history[-self.history_window:])
+        # Validate and coerce outside the lock
+        valid = []
+        for idx, item in enumerate(window):
+            try:
+                valid.append([float(item[k]) for k in self.metric_keys])
+            except (KeyError, TypeError, ValueError):
+                logger.debug("Skipping invalid history row at %d: %s", idx, item)
+        if len(valid) < max(10, int(0.5 * self.history_window)):
+            return False
+        X = np.asarray(valid, dtype=float)
+        self.model.fit(X)
+        logger.info("Trained anomaly detection model on %d samples.", len(valid))
+        return True
     def detect(self, metrics: List[Dict[str, Any]]):
         if len(self.history) < self.history_window:
             return
