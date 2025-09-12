@@ -15,8 +15,7 @@ class FederationController:
         self.registry.add_or_update_cluster(remote_cluster)
 
     def handle_peer_status_update(self, cluster_id: str, status: str):
-        cluster = self.registry.get_cluster(cluster_id)
-        if cluster:
+        if cluster := self.registry.get_cluster(cluster_id):
             cluster.status = status
             logger.info(f"Cluster '{cluster_id}' status updated to {status}")
 
