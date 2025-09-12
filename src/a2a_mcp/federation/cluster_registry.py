@@ -23,7 +23,9 @@ class ClusterRegistry:
                 del self._clusters[cluster_id]
 
     def get_cluster(self, cluster_id: str) -> Optional[ClusterInfo]:
-        return self._clusters.get(cluster_id)
+        with self._lock:
+            return self._clusters.get(cluster_id)
 
     def list_clusters(self) -> List[ClusterInfo]:
-        return list(self._clusters.values())
+        with self._lock:
+            return list(self._clusters.values())
