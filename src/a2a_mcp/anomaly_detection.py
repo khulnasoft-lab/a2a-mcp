@@ -53,9 +53,12 @@ class AnomalyDetector:
         for i, pred in enumerate(preds):
             if pred == -1:
                 # Anomaly detected
-                logger.warning(f"Anomaly detected for metrics: {metrics[i]}")
-                self.on_anomaly(metrics[i])
-
+                payload = metrics[i]
+                logger.warning("Anomaly detected for metrics: %s", payload)
+                try:
+                    self.on_anomaly(payload)
+                except Exception:
+                    logger.exception("on_anomaly callback failed")
     def run(self, interval: int = 10):
         self.running = True
         while self.running:
