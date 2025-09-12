@@ -35,6 +35,4 @@ def infer_anomaly_type(anomaly_data):
         return "disconnect"
     if anomaly_data.get("msg_rate", 0) > 1000:
         return "message_storm"
-    if anomaly_data.get("latency", 0) > 1000:
-        return "latency_spike"
-    return "unknown"
+    return "latency_spike" if anomaly_data.get("latency", 0) > 1000 else "unknown"
