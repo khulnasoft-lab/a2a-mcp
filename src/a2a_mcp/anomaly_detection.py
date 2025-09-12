@@ -71,8 +71,7 @@ class AnomalyDetector:
     def run(self, interval: int = 10):
         self.running = True
         while self.running:
-            metrics = fetch_agent_metrics()
-            if metrics:
+            if metrics := fetch_agent_metrics():
                 self.add_metrics(metrics)
                 if self.train():
                     self.detect(metrics)
