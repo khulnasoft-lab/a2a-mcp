@@ -19,13 +19,14 @@ class AnomalyDetector:
         self,
         metric_keys: List[str],
         on_anomaly: Callable[[Dict[str, Any]], None],
-        history_window: int = 100
+        history_window: int = 100,
+        contamination: float = 0.02
     ):
         self.metric_keys = metric_keys
         self.on_anomaly = on_anomaly
         self.history_window = history_window
         self.history = []
-        self.model = IsolationForest(contamination=0.02)
+        self.model = IsolationForest(contamination=contamination)
         self.lock = threading.Lock()
         self.running = False
 
